@@ -1,3 +1,20 @@
+resource "aws_iam_policy" "create_log_group" {
+    name = "CreateCloudWatchLogGroup"
+
+    policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [
+            {
+                Action = [
+                    "logs:CreateLogGroup"
+                ]
+                Effect = "Allow"
+                Resource = "*"
+            }
+        ]
+    })
+}
+
 resource "aws_iam_role" "ecs_execution_role" {
     name = join("-", ["aline", "kwi", var.env, "ecs", "execution", "role"])
     assume_role_policy = data.aws_iam_policy_document.execution_policy_document.json
@@ -19,7 +36,7 @@ resource "aws_iam_role_policy_attachment" "eks_ec2_container_registry_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "create_log_group" {
-    policy_arn = "arn:aws:iam::086620157175:policy/CreateLogGroupPolicy"
+    policy_arn = aws_iam_policy.create_log_group.arn
     role = aws_iam_role.ecs_execution_role.name
 }
 
