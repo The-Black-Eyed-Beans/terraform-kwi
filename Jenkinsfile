@@ -88,7 +88,7 @@ pipeline {
                 echo "Testing Terraform Deployment"
                 dir ("${TEST_DIR}") {
                     script {
-                        def plans = sh(script: 'cat ../deployment/out.txt',returnStdout: true)
+                        def plans = sh(script: 'cat ../${ENVIRONMENT}/out.txt',returnStdout: true)
                         if (plans.contains("Plan:")) {
                             sh "aws s3 --profile keshaun cp s3://${BUCKET_KWI}/inputs/aws_infrastructure_testdata_${ENVIRONMENT}.json ."
                             sh "mv aws_infrastructure_testdata_${ENVIRONMENT}.json aws_infrastructure_testdata.json"
