@@ -59,8 +59,6 @@ type IamJson struct {
 	Name string `json:"name"`
 }
 
-var directory string
-var file string
 var deployment_passed bool
 var ExpectedJson MainJson
 
@@ -75,8 +73,8 @@ func init() {
 func TestAWSInfraInput(t *testing.T) {
 	t.Parallel()
 
-	directory = envsubst.String("../${ENVIRONMENT}")
-	file = envsubst.String("input-${ENVIRONMENT}.tfvars")
+	directory, err := envsubst.String("../${ENVIRONMENT}")
+	file, err := envsubst.String("input-${ENVIRONMENT}.tfvars")
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: directory,
