@@ -1,0 +1,6 @@
+*/.terraform
+*/.terraform.lock.hcl
+*/backend.hcl
+*/input*.tfvars
+test/*.json
+test/go.*
