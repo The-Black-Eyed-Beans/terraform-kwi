@@ -94,8 +94,8 @@ pipeline {
                             sh "mv aws_infrastructure_testdata_${ENVIRONMENT}.json aws_infrastructure_testdata.json"
                             sh "go mod init aws_infrastructure"
                             sh "go mod tidy"
-                            sh "envsubst < aws_infrastructure_test.go | go test - -v -timeout 30m"
-                            //sh "go test ./aws_infrastructure_test.go -v -timeout 30m"
+                            //sh "envsubst < aws_infrastructure_test.go | go test - -v -timeout 30m"
+                            sh "go test ./aws_infrastructure_test.go -v -timeout 30m"
                         } else {
                             error("No changes to be made to Terraform infrastructure.")
                         }
@@ -111,8 +111,8 @@ pipeline {
                     script {
                         def plans = sh(script: 'cat out.txt',returnStdout: true)
                         if (plans.contains("Plan:")) {
-                            sh "terraform apply -auto-approve -no-color -var-file=input-${ENVIRONMENT}.tfvars > output-${COMMIT_HASH}.txt"
-                            sh "aws s3 --profile keshaun cp output-${COMMIT_HASH}.txt s3://${BUCKET_KWI}/output/"
+                            sh "terraform apply -auto-approve -no-color -var-file=input-${ENVIRONMENT}.tfvars > output-${ENVIRONMENT}-${COMMIT_HASH}.txt"
+                            sh "aws s3 --profile keshaun cp output-${ENVIRONMENT}-${COMMIT_HASH}.txt s3://${BUCKET_KWI}/output/"
                         } else {
                             error("No changes to be made to Terraform infrastructure.")
                         }
@@ -128,7 +128,7 @@ pipeline {
             sh "rm ${TEST_DIR}/go.sum"
             sh "rm ${TEST_DIR}/aws_infrastructure_testdata.json"
             sh "rm ${ENVIRONMENT}/backend-${ENVIRONMENT}.hcl"
-            sh "rm ${ENVIRONMENT}/output-${COMMIT_HASH}.txt"
+            sh "rm ${ENVIRONMENT}/output-${ENVIRONMENT}-${COMMIT_HASH}.txt"
         }
     }
 }
