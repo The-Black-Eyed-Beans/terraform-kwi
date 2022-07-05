@@ -74,7 +74,14 @@ func TestAWSInfraInput(t *testing.T) {
 	t.Parallel()
 
 	directory, err := envsubst.String("../${ENVIRONMENT}")
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	file, err := envsubst.String("input-${ENVIRONMENT}.tfvars")
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: directory,
