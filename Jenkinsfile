@@ -87,7 +87,7 @@ pipeline {
             steps {
                 echo "Testing Terraform Deployment"
                 dir ("${TEST_DIR}") {
-                    script { envsubst < deployment.yml | kubectl apply -f -
+                    script {
                         def plans = sh(script: 'cat ../deployment/out.txt',returnStdout: true)
                         if (plans.contains("Plan:")) {
                             sh "aws s3 --profile keshaun cp s3://${BUCKET_KWI}/inputs/aws_infrastructure_testdata_${ENVIRONMENT}.json ."
