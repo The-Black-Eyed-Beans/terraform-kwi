@@ -57,17 +57,14 @@ pipeline {
                 }
                 dir ("${MODULE_DIR}/ecs") {
                     echo "Checking ECS module..."
-                    sh "tflint --init"
                     sh "tflint"
                 }
                 dir ("${MODULE_DIR}/eks") {
                     echo "Checking EKS module..."
-                    sh "tflint --init"
                     sh "tflint"
                 }
                 dir ("${MODULE_DIR}/secret") {
                     echo "Checking Secrets module..."
-                    sh "tflint --init"
                     sh "tflint"
                 }
             }
