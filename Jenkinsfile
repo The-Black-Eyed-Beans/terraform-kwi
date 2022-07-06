@@ -41,6 +41,7 @@ pipeline {
                     sh """
                     terraform init \
                         -no-color \
+                        -migrate-state \
                         -backend-config=backend-${ENVIRONMENT}.hcl
                     """
                 }
